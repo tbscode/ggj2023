@@ -35,6 +35,8 @@ BASE_URL = os.environ["BASE_URL"]
 DEBUG = os.environ["DEBUG"].lower() in ('true', '1', 't')
 # Application definition
 
+STATIC_ROOT = "static/"
+
 INSTALLED_APPS = [
     'management',
     'jazzmin',
@@ -78,8 +80,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'back.wsgi.application'
-ASGI_APPLICATION = 'back.asgi.application'
+WSGI_APPLICATION = 'server.wsgi.application'
+ASGI_APPLICATION = 'server.asgi.application'
 
 AUTH_USER_MODEL = 'management.User'
 
