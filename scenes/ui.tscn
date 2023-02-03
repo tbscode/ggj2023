@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="StyleBoxTexture" id=1]
+
+[node name="root" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="start_game_button" type="Button" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 683.0
+margin_top = 527.0
+margin_right = 1.0
+margin_bottom = -5.0
+custom_styles/hover = SubResource( 1 )
+text = "Start"
