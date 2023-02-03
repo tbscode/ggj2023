@@ -93,6 +93,16 @@ LOGGING_IGNORED_PARAMS = ["password"]
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "CONFIG": {
+            "hosts": [("host.docker.internal", 6379)],
+        },
+    }
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
