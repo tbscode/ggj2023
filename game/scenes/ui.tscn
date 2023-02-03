@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/menu/menu.gd" type="Script" id=1]
 [ext_resource path="res://scripts/auth.gd" type="Script" id=2]
+[ext_resource path="res://scripts/socket.gd" type="Script" id=3]
 
 [sub_resource type="StyleBoxTexture" id=1]
 
@@ -31,4 +32,17 @@ margin_top = 215.0
 margin_right = -326.0
 margin_bottom = -359.0
 
+[node name="connect_websocket" type="Button" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 326.0
+margin_top = 330.0
+margin_right = -289.0
+margin_bottom = -237.0
+text = "connect session"
+
+[node name="socket_manager" type="Node" parent="."]
+script = ExtResource( 3 )
+
 [connection signal="pressed" from="join_game_button" to="." method="_on_join_game_button_pressed"]
+[connection signal="pressed" from="connect_websocket" to="." method="_on_connect_websocket_pressed"]

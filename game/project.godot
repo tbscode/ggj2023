@@ -14,6 +14,14 @@ config/name="ggj2023"
 run/main_scene="res://scenes/ui.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=800
+
+[global]
+
+full=false
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true

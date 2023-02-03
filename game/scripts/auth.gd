@@ -28,9 +28,14 @@ func request_guest_login():
 func _on_guest_login_request_completed(request_id, result, headers, body):
 	if result == 200:
 		var response = parse_json(body.get_string_from_utf8())
-		print("GOT")
-		print(response)
-		get_node("/root/root").login_completed(response['username'])
+
+		# We need to extract the session token so we can stay logged in!
+		var header_str = str(headers)
+		var id_start = str(headers).find("sessionid=")
+		header_str = header_str.substr(id_start + len("sessionid="))
+		var session_id = header_str.split(";")[0]
+
+		get_node("/root/root").login_completed(response['username'], session_id)
 	else:
 		# TODO: handle the error
 		print("ERROR cant login")

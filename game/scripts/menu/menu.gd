@@ -1,19 +1,21 @@
 extends Control
 
-
-var room_name = ""
+var session_id = ""
+var username = ""
 
 func _ready():
 	pass
 
-func _on_room_name_input_text_changed(new_text):
-	print("room name changed to: " + new_text)
-
-
 func _on_join_game_button_pressed():
-	print("TRIGGER BUTTOn")
 	$user_auth.login_user()
 
-func login_completed(username):
+func login_completed(username, session_id):
 	print(username)
 	$name_label.text = username
+	self.session_id = session_id
+	self.username = username
+
+
+func _on_connect_websocket_pressed():
+	print("Tying to connect to websocket")
+	$socket_manager.connect_to_socket()
