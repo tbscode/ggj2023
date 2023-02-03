@@ -31,6 +31,7 @@ func _on_guest_login_request_completed(request_id, result, headers, body):
 
 		# We need to extract the session token so we can stay logged in!
 		var header_str = str(headers)
+		print("HEAD", header_str)
 		var id_start = str(headers).find("sessionid=")
 		header_str = header_str.substr(id_start + len("sessionid="))
 		var session_id = header_str.split(";")[0]

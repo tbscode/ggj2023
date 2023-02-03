@@ -4,6 +4,7 @@ const BACKEND_URL = "http://localhost:8000"
 const SOCKET_URL = "ws://localhost:8000/ws/game/"
 
 var _client = WebSocketClient.new()
+var my_group = ""
 
 func _ready():
 	_client.connect("connection_closed", self, "_closed")
@@ -11,10 +12,12 @@ func _ready():
 	_client.connect("connection_established", self, "_connected")
 	_client.connect("data_received", self, "_on_data")
 
-func connect_to_socket():
-	print("ATTEMPTING CONNECT")
+func connect_to_socket(session_id):
+	print("ATTEMPTING CONNECT", session_id)
 	# TODO use secure websocket in production
-	var err = _client.connect_to_url(SOCKET_URL)
+	var headers = PoolStringArray() # Need this for user authentication
+	headers.append("Cookie: sessionid=" + session_id + ";")
+	var err = _client.connect_to_url(SOCKET_URL, [], false, headers)
 	if err != OK:
 		print("Unable to connect")
 		set_process(false)
@@ -37,9 +40,24 @@ func _on_data():
 	# Print the received packet, you MUST always use get_peer(1).get_packet
 	# to receive data from server, and not get_packet directly when not
 	# using the MultiplayerAPI.
-	print("Got data from server: ", _client.get_peer(1).get_packet().get_string_from_utf8())
+	var data = _client.get_peer(1).get_packet().get_string_from_utf8()
+	print("Got data from server: ", data)
+	get_node("/root/root/console").text += data
+	data = JSON.parse(data).result
+	if data['event'] == 'connected':
+		# Now we can start playing
+		self.my_group = data['group']
+		print("CONNECTED TO SERVER", "Got group", self.my_group)
 
 func _process(delta):
 	# Call this in _process or _physics_process. Data transfer, and signals
 	# emission will only happen when calling this function.
 	_client.poll()
+
+func send_message(data):
+	var user_dict = {"type" : "simple", "username" : get_node("/root/root").username, "recipients" : "all", "group" : self.my_group}
+	user_dict.merge(data)
+	print("SENDING MESSAGE", user_dict)
+	var text_data = JSON.print(user_dict).to_utf8()
+	print("SENDING MESSAGE 2", text_data)
+	_client.get_peer(1).put_packet(text_data)

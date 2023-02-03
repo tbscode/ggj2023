@@ -18,4 +18,9 @@ func login_completed(username, session_id):
 
 func _on_connect_websocket_pressed():
 	print("Tying to connect to websocket")
-	$socket_manager.connect_to_socket()
+	$socket_manager.connect_to_socket(self.session_id)
+
+
+
+func _on_test_message_button_pressed():
+	$socket_manager.send_message({"data" : "Hello World"})
