@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from management.api import guest_login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api/guest_login/", guest_login)
 ]

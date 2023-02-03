@@ -9,9 +9,7 @@ def guest_login(request):
     username = "guest-" + str(uuid4())
     password = str(uuid4)
     user = User.objects.create(username=username, password=password)
-    auth_user = authenticate(username=user.number,
-                             password=user.settings.default_password)
-    login(request, user=auth_user)
+    login(request, user=user)
     return HttpResponse(f"Logged in as '{username}'")
 
 
