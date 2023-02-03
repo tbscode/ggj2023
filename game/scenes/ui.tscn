@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/menu/menu.gd" type="Script" id=1]
+[ext_resource path="res://scripts/auth.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxTexture" id=1]
 
@@ -8,16 +9,6 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-
-[node name="random_game_button" type="Button" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 354.0
-margin_top = 338.0
-margin_right = -328.0
-margin_bottom = -218.0
-custom_styles/hover = SubResource( 1 )
-text = "Random Game"
 
 [node name="join_game_button" type="Button" parent="."]
 anchor_right = 1.0
@@ -27,15 +18,17 @@ margin_top = 257.0
 margin_right = -329.0
 margin_bottom = -299.0
 custom_styles/hover = SubResource( 1 )
-text = "Join Game"
+text = "Login as guest"
 
-[node name="room_name_input" type="LineEdit" parent="."]
+[node name="user_auth" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="name_label" type="RichTextLabel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 356.0
-margin_top = 199.0
-margin_right = -339.0
-margin_bottom = -373.0
-placeholder_text = "game room name"
+margin_left = 355.0
+margin_top = 215.0
+margin_right = -326.0
+margin_bottom = -359.0
 
-[connection signal="text_changed" from="room_name_input" to="." method="_on_room_name_input_text_changed"]
+[connection signal="pressed" from="join_game_button" to="." method="_on_join_game_button_pressed"]

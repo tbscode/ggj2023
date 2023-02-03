@@ -1,7 +1,7 @@
 extends Node
 
 const BACKEND_URL = "http://localhost:8000"
-const GUEST_LOGIN_URL = BACKEND_URL + "/guest_login"
+const GUEST_LOGIN_URL = BACKEND_URL + "/api/guest_login/"
 const USER_LOGIN_URL = BACKEND_URL + "/user_login"
 
 func request_login(username, password):
@@ -15,14 +15,32 @@ func request_login(username, password):
 		print("ERROR cant login")
 
 func request_guest_login():
+	var request = HTTPRequest.new()
+	add_child(request)
+	var body = to_json({})
+
+	request.connect("request_completed", self, "_on_guest_login_request_completed")
+	var error = request.request(GUEST_LOGIN_URL)
+	if error != OK:
+		print("ERROR cant login")
 	pass
 
+func _on_guest_login_request_completed(request_id, result, headers, body):
+	if result == 200:
+		var response = parse_json(body.get_string_from_utf8())
+		print("GOT")
+		print(response)
+		get_node("/root/root").login_completed(response['username'])
+	else:
+		# TODO: handle the error
+		print("ERROR cant login")
 
 func _on_login_request_completed(request_id, result, headers, body):
 	if result == 200:
 		var response = parse_json(body.get_string_from_utf8())
 		print("GOT")
 		print(response)
+		return response
 	else:
 		# TODO: handle the error
 		print("ERROR cant login")
