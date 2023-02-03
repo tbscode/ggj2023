@@ -23,9 +23,14 @@ https://giventofly.github.io/pixelit/
 
 # Simple online game mecanic
 
-Every player that opens the app gets a random user-hash. 
+Every player that opens the app gets a random user-hash.
 You may personalize your account and add an own username and password.
 
 When logged in there a two options:
+
 1. enter lobby by loby name
 2. enter random loby ( request a game lobby queue )
+
+# Doing the authentication with godot:
+
+https://godotengine.org/qa/70514/http-request-using-basic-auth

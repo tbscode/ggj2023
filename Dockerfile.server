@@ -1,0 +1,14 @@
+FROM python:3.10-alpine
+
+WORKDIR /server
+
+COPY ./requirements.txt /tmp/requirements.txt
+
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN apk add --no-cache git
+RUN pip cache purge
+
+EXPOSE 8000
+
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["sh", "./entry.sh"]
