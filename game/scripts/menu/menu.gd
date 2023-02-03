@@ -17,4 +17,3 @@ func _on_join_game_button_pressed():
 func login_completed(username):
 	print(username)
 	$name_label.text = username
-	pass
