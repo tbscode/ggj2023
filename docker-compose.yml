@@ -23,3 +23,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     profiles: [ "default", "backend", "dev" ]
+  redis:
+    image: redis:5
+    ports: 
+      - "6379:6379"
+    network_mode: bridge
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles: ["default", "redis", "dev", "stage"]
