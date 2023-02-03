@@ -1,0 +1,13 @@
+Django==4.1.2
+channels==4.0.0
+channels-redis # For using channels with redis
+celery==5.2.7
+django-celery-results # Task and state admin displays for celery
+django-celery-beat # For automatic and timed tasks
+djangorestframework==3.14.0
+uvicorn[standard]
+drf-spectacular[sidecar] # renders swagger, route will only be available for admins if in production
+django_nextjs
+openai
+ipython # With this we can use the IPython shell on manage.py shell
+django-jazzmin
