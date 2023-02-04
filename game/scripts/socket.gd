@@ -2,7 +2,7 @@ extends Node
 
 #const BACKEND_URL = "http://localhost:8000"
 const BACKEND_URL = "https://t1m.me"
-const SOCKET_URL = "ws://t1m.me/ws/game/"
+const SOCKET_URL = "wss://t1m.me/ws/game/"
 #const SOCKET_URL = "ws://localhost:8000/ws/game/"
 
 var _client = WebSocketClient.new()
