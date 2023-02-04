@@ -11,3 +11,4 @@ django_nextjs
 openai
 ipython # With this we can use the IPython shell on manage.py shell
 django-jazzmin
+whitenoise

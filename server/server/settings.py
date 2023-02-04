@@ -35,12 +35,13 @@ BASE_URL = os.environ["BASE_URL"]
 DEBUG = os.environ["DEBUG"].lower() in ('true', '1', 't')
 # Application definition
 
-STATIC_ROOT = "static/"
+STATIC_ROOT = "staticfiles/"
 
 INSTALLED_APPS = [
     'management',
     'jazzmin',
     'rest_framework',
+    "whitenoise.runserver_nostatic",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -89,7 +91,7 @@ LOGGING_IGNORED_PARAMS = ["password"]
 
 # CSRF_TRUSTED_ORIGINS = ["https://msgmate.io"]
 
-
+CORS_ALLOW_ALL_ORIGINS = True
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -145,12 +147,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'game/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+WHITENOISE_INDEX_FILE = True
 
 JAZZMIN_SETTINGS = {
     "site_title": "AI Mate Admin",
@@ -189,6 +193,7 @@ JAZZMIN_SETTINGS = {
     "use_google_fonts_cdn": True,  # TODO: we don't want his
     "show_ui_builder": False,
 }
+
 
 JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": True,
