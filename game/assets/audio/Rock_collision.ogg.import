@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Rock_collision.ogg-4f8426a3b3401edf8d9740f8b78cdf90.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/Rock_collision.ogg"
+dest_files=[ "res://.import/Rock_collision.ogg-4f8426a3b3401edf8d9740f8b78cdf90.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

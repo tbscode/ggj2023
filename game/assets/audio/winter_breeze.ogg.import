@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/winter_breeze.ogg-bc9af6d6fe13d4cf24111486396ecea4.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/winter_breeze.ogg"
+dest_files=[ "res://.import/winter_breeze.ogg-bc9af6d6fe13d4cf24111486396ecea4.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

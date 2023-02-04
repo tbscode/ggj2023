@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/WaterSplash1.ogg-be2af4ccd64d2ebdc75cd52d5c0aba34.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/WaterSplash1.ogg"
+dest_files=[ "res://.import/WaterSplash1.ogg-be2af4ccd64d2ebdc75cd52d5c0aba34.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -41,6 +41,7 @@ func _on_guest_login_request_completed(request_id, result, headers, body):
 		var session_id = header_str.split(";")[0]
 
 		get_node("/root/root").login_completed(response['username'], session_id, response['key'])
+		get_tree().change_scene("res://scenes/game.tscn")
 	else:
 		# TODO: handle the error
 		print("ERROR cant login")

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/birdandforest.ogg-0156c6559c25d1c98e8603a9f6b1be0e.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/birdandforest.ogg"
+dest_files=[ "res://.import/birdandforest.ogg-0156c6559c25d1c98e8603a9f6b1be0e.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

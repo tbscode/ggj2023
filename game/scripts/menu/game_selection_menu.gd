@@ -32,6 +32,9 @@ func _on_join_game_button_pressed():
 	
 	$user_auth.login_user()
 
+func _on_play_online_pressed():
+	_on_join_game_button_pressed()
+
 func login_completed(username, session_id, key):
 	print(username)
 	$name_label.text = username
@@ -41,12 +44,6 @@ func login_completed(username, session_id, key):
 	self.session_id = session_id
 	self.username = username
 
-func _on_play_online_button_pressed():
-	print("PLAY online button")
-	get_tree().change_scene("res://scenes/game.tscn")
-
-
-
 func _on_connect_websocket_pressed():
 	print("Tying to connect to websocket")
 	$socket_manager.connect_to_socket(self.session_id)
@@ -55,3 +52,4 @@ func _on_connect_websocket_pressed():
 
 func _on_test_message_button_pressed():
 	$socket_manager.send_message({"data" : "Hello World"})
+

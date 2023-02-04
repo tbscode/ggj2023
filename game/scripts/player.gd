@@ -2,6 +2,8 @@ extends Node2D
 
 var IS_ONLINE = Global.playing_online
 
+const FULL_XBAR_WIDTH = 1450.0
+
 const MIN_ANGLE_THRESHOLD = deg2rad(10.0)
 const ANGLE_CHANGE_VELOCITY = deg2rad(10.0) * 600.0
 const GROW_SPEED = 80.0
@@ -10,6 +12,8 @@ const MIN_ROOT_ELEMENT_SPAWN_DIST = 100.0
 var cur_maximum_root_element_length = MAXIMUM_ROOT_ELEMENT_LENGTH
 const ROOT_SHRINK_SPEED = 0.04
 const MINIMUM_ROOT_SCALE = 0.4
+
+const XP_DRAIN_SPEED = 2.0
 
 # A player is a 'root'
 # The root always grows downwards
@@ -21,6 +25,8 @@ var root_parts = [] # this should hold a list of nodes ( which are all root part
 
 var root_path_element_positions = []
 var root_path_element_nodes = []
+
+# TODO minimum wulzt size
 
 func _ready():
 	pass
@@ -73,17 +79,27 @@ func move_direction(delta):
 	#$end_of_root.position.x += heading.x
 	#$end_of_root.position.y += heading.y
 	var collide = $end_of_root.move_and_collide(heading)
-	print("TOTOATALL COLLLDERAL", collide)
 	if collide != null:
-		print("JOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooooo", collide.collider.get_path())
-		# This destroyed the part of the other root
-		for child in collide.collider.get_children():
-			child.queue_free()
+		# print("TOTOATALL COLLLDERAL", collide, collide.collider.name)
+		# print("JOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooooo", collide.collider.get_path())
 
-		var owner = collide.collider.get_owner()
-		collide.collider.queue_free()
-		#owner.queue_free()
-		relocate_current_root()
+		var path = str(collide.collider.get_path())
+
+		if (not "water" in path) and (not "groth" in path):
+			var owner = collide.collider.get_parent()
+			owner.queue_free()
+			relocate_current_root()
+		else:
+			if "water" in path:
+				if not get_node("/root/root/audios/collect_water").playing:
+					get_node("/root/root/audios/collect_water").play()
+			elif "groth" in path:
+				if not get_node("/root/root/audios/grow_sound").playing:
+					get_node("/root/root/audios/grow_sound").play()
+				var owner = collide.collider.get_parent()
+				self.scale.x *= owner.groth_multiplier
+				self.scale.y *= owner.groth_multiplier
+				owner.queue_free()
 
 	path_lengh_since_root_element += heading.length()
 
@@ -125,6 +141,8 @@ func append_root():
 
 	cur_maximum_root_element_length = $end_of_root.scale.y * MAXIMUM_ROOT_ELEMENT_LENGTH
 
+	get_node("/root/root/audios/grow_root").play()
+
 	own(node, self)
 	root_parts.append(node)
 
@@ -144,13 +162,59 @@ func spawn_other_player_root(position, scale, rotation):
 	var container = get_node("/root/root/players/others")
 
 	container.add_child(node)
-	node.position.x = position[0]
-	node.position.y = position[1]
-	node.scale.x = scale[0]
-	node.scale.y = scale[1]
-	node.rotation = rotation
+	node.rect_position.x = position[0]
+	node.rect_position.y = position[1]
+	node.rect_scale.x = scale[0]
+	node.rect_scale.y = scale[1]
+	node.rect_rotation = rotation
 
 	own(node, container)
+
+func populate_map(map):
+	print("PUPULATING", map)
+	for item in map:	
+		# print("TIEM", item)
+		# print("ADDMING", item)
+		if item['type'] == "water":
+			var node = get_node("/root/root/resources/water").duplicate()
+			var container = get_node("/root/root/items")
+
+			container.add_child(node)
+			node.position.x = item['position'][0]
+			node.position.y = item['position'][1]
+			node.xp = item['xp']
+			node.INITAL_XP = item['xp']
+
+			own(node, container)
+		elif item['type'] == "growth":
+			var node = get_node("/root/root/resources/groth").duplicate()
+			var container = get_node("/root/root/items")
+
+			container.add_child(node)
+			node.position.x = item['position'][0]
+			node.position.y = item['position'][1]
+
+			node.groth_multiplier = item['grow']
+
+			own(node, container)
+		elif item['type'] == 'stone':
+			var node = get_node("/root/root/resources/stone1").duplicate()
+			var container = get_node("/root/root/items")
+
+			container.add_child(node)
+			node.position.x = item['position'][0]
+			node.position.y = item['position'][1]
+
+			own(node, container)
+		elif item['type'] == 'bone':
+			var node = get_node("/root/root/resources/bone1").duplicate()
+			var container = get_node("/root/root/items")
+
+			container.add_child(node)
+			node.position.x = item['position'][0]
+			node.position.y = item['position'][1]
+
+			own(node, container)
 
 static func own(node, new_owner):
 	if not node == new_owner and (not node.owner or node.filename):

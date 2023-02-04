@@ -1,9 +1,12 @@
 extends Node2D
 
+const FULL_XBAR_WIDTH = 1450.0
+
 var session_id = ""
 var username = ""
 
 var game_started = false
+
 
 func _ready():
 	if not Global.playing_online:
@@ -12,6 +15,8 @@ func _ready():
 		get_node("/root/root/pre_game_screen").hide()
 		get_node("/root/root/players/player1").init_player(Vector2(0.0, 0.0))
 		game_started = true
+	change_left_progress(0.7)
+	change_right_progress(0.7)
 
 func _on_join_lobby_pressed():
 	print("User trying to join lobby")
@@ -20,6 +25,14 @@ func _on_join_lobby_pressed():
 
 func _on_join_game_button_pressed():
 	$user_auth.login_user()
+
+func change_left_progress(progress):
+	get_node("/root/root/game_ui/xp_bar_red_full").region_rect.size.x = FULL_XBAR_WIDTH * progress
+
+func change_right_progress(progress):
+	progress = 1.0 - progress
+	get_node("/root/root/game_ui/xp_bar_blue_full").region_rect.size.x -= FULL_XBAR_WIDTH * progress
+	get_node("/root/root/game_ui/xp_bar_blue_full").offset.x += FULL_XBAR_WIDTH * progress
 
 func login_completed(username, session_id, key):
 	print(username)

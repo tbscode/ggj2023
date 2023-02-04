@@ -59,10 +59,12 @@ func _on_data():
 		self.my_group = data['group']
 		self.my_team = data['team']
 		self.my_spawn = data['spawn']
+
 		print("SPAWN", self.my_spawn)
 
 		get_node("/root/root/players/player1").init_player(Vector2(self.my_spawn[0], self.my_spawn[1]))
 		get_node("/root/root/game_ui/team_label").text = "Team: " + self.my_team
+		get_node("/root/root/players/player1").populate_map(data['map'])
 		print("CONNECTED TO SERVER", "Got group", self.my_group)
 	elif data['event'] == 'game_start':
 		get_node(console_path).text += "\nGOT GAME START!\n"
