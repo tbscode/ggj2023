@@ -1,7 +1,12 @@
 from django.db import models
 from uuid import uuid4
+from secrets import token_hex
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+
+
+def rand_string():
+    return token_hex(16)
 
 
 class UserManager(BaseUserManager):
@@ -55,6 +60,7 @@ class User(AbstractUser):
 
     def leave_room(self):
         self.state.cur_room.active_players.remove(self)
+        self.state.cur_room.old = True
         self.state.cur_room.save()
 
         self.state.cur_room = None
@@ -62,7 +68,23 @@ class User(AbstractUser):
 
     objects = UserManager()
     hash = models.CharField(max_length=100, blank=True,
-                            unique=True, default=uuid4)
+                            unique=True, default=token_hex)
+
+
+PLAYERS_PER_ROOM = 2
+SPAWNS = {
+    "red": {
+        0: (112, 145)
+    },
+    "blue": {
+        0: (452, 145)
+    },
+}
+
+
+def random_spawn(team):
+    # TODO make this acually random
+    return SPAWNS[team][0]
 
 
 class GameRoom(models.Model):
@@ -70,14 +92,34 @@ class GameRoom(models.Model):
     time = models.DateTimeField(auto_now_add=True)
 
     hash = models.CharField(max_length=100, blank=True,
-                            unique=True, default=uuid4)
+                            unique=True, default=rand_string)
 
     active_players = models.ManyToManyField(
         User, related_name="active_players", blank=True, null=True)
 
+    blue_team = models.ManyToManyField(
+        User, related_name="blue_team", blank=True, null=True)
+
+    red_team = models.ManyToManyField(
+        User, related_name="red_team", blank=True, null=True)
+
+    old = models.BooleanField(default=False)
+
     def join_room(self, user):
         self.active_players.add(user)
+        team = ""
+        if self.red_team.count() < self.blue_team.count():
+            team = "red"
+            self.red_team.add(user)
+        else:
+            team = "blue"
+            self.blue_team.add(user)
         self.save()
+        spawn = random_spawn(team)
+        return team, spawn
+
+    def is_room_full(self):
+        return self.active_players.count() >= PLAYERS_PER_ROOM
 
 
 def get_game_room():
@@ -87,6 +129,8 @@ def get_game_room():
         room = GameRoom.objects.create()
     else:
         room = GameRoom.objects.all().order_by("time").first()
+        if room.is_room_full() or room.old:
+            room = GameRoom.objects.create()
     return room
 
 
