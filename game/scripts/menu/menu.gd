@@ -6,7 +6,12 @@ var username = ""
 var game_started = false
 
 func _ready():
-	pass
+	if not Global.playing_online:
+		# generate a offline map
+		# TODO select a random spawn
+		get_node("/root/root/pre_game_screen").hide()
+		get_node("/root/root/players/player1").init_player(Vector2(0.0, 0.0))
+		game_started = true
 
 func _on_join_lobby_pressed():
 	print("User trying to join lobby")

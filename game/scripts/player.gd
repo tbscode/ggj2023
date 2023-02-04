@@ -1,6 +1,6 @@
-extends Node
+extends Node2D
 
-var IS_ONLINE = true
+var IS_ONLINE = Global.playing_online
 
 const MIN_ANGLE_THRESHOLD = deg2rad(10.0)
 const ANGLE_CHANGE_VELOCITY = deg2rad(10.0) * 600.0
@@ -9,7 +9,7 @@ const MAXIMUM_ROOT_ELEMENT_LENGTH = 24.0
 const MIN_ROOT_ELEMENT_SPAWN_DIST = 100.0
 var cur_maximum_root_element_length = MAXIMUM_ROOT_ELEMENT_LENGTH
 const ROOT_SHRINK_SPEED = 0.04
-const MINIMUM_ROOT_SCALE = 0.6
+const MINIMUM_ROOT_SCALE = 0.4
 
 # A player is a 'root'
 # The root always grows downwards
@@ -70,12 +70,25 @@ func relocate_current_root():
 func move_direction(delta):
 	# Check the current angle, calculate the position to move to
 	var heading = Vector2(cos(angle), sin(angle)) * GROW_SPEED * delta
-	$end_of_root.position.x += heading.x
-	$end_of_root.position.y += heading.y
+	#$end_of_root.position.x += heading.x
+	#$end_of_root.position.y += heading.y
+	var collide = $end_of_root.move_and_collide(heading)
+	print("TOTOATALL COLLLDERAL", collide)
+	if collide != null:
+		print("JOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooooo", collide.collider.get_path())
+		# This destroyed the part of the other root
+		for child in collide.collider.get_children():
+			child.queue_free()
+
+		var owner = collide.collider.get_owner()
+		collide.collider.queue_free()
+		#owner.queue_free()
+		relocate_current_root()
+
 	path_lengh_since_root_element += heading.length()
 
 	var dist = root_element_positions[-1].distance_to($end_of_root.position)
-	print("DIST", dist)
+	#print("DIST", dist)
 	if dist >= cur_maximum_root_element_length:
 		# now we sould place a new root texture!
 		append_root()
@@ -123,10 +136,10 @@ func append_root():
 			"rotation": rot_dir
 		})
 
-	print("INSTANCE", node);
+	#print("INSTANCE", node);
 
 func spawn_other_player_root(position, scale, rotation):
-	var node = get_node("/root/root/resources/root_branch").duplicate()
+	var node = get_node("/root/root/resources/root_branch_collide").duplicate()
 
 	var container = get_node("/root/root/players/others")
 
@@ -145,3 +158,6 @@ static func own(node, new_owner):
 	if node.get_child_count():
 		for kid in node.get_children():
 			own(kid, new_owner)
+
+func _on_body_body_entered(body):
+	print("COLLLIDDDAAAA", body)

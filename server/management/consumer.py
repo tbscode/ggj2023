@@ -21,8 +21,10 @@ class GameConsumer(AsyncWebsocketConsumer):
             print("USERNAME", self.scope["user"].username)
             user = self.scope["user"]
             room = await sync_to_async(get_game_room)()
+            not_alreay_in_room = await sync_to_async(user.join_room)(room)
+            if not not_alreay_in_room:
+                return
             team, spawn = await sync_to_async(room.join_room)(user)
-            await sync_to_async(user.join_room)(room)
             print("MAKING GROUP", room.hash)
             await self.channel_layer.group_add(room.hash, self.channel_name)
             await self.accept()
@@ -30,6 +32,11 @@ class GameConsumer(AsyncWebsocketConsumer):
                 'event': 'connected',
                 'group': room.hash,
                 'team': team,
+                'map': room.map,
+                'xp': {
+                    'red': room.red_tree_xp,
+                    'blue': room.blue_tree_xp,
+                },
                 'spawn': spawn,
                 'active_players': await sync_to_async(list_active_players)(room),
             }))

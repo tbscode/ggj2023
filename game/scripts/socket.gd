@@ -51,7 +51,7 @@ func _on_data():
 	# to receive data from server, and not get_packet directly when not
 	# using the MultiplayerAPI.
 	var data = _client.get_peer(1).get_packet().get_string_from_utf8()
-	print("Got data from server: ", data)
+	#print("Got data from server: ", data)
 	get_node(console_path).text += data
 	data = JSON.parse(data).result
 	if data['event'] == 'connected':
@@ -69,7 +69,10 @@ func _on_data():
 		get_node("/root/root").game_started = true
 		get_node("/root/root/pre_game_screen").hide()
 	elif data['event'] == 'other_player_spawn_root':
-		print("SPAWNING OTHER PLAYER ROOT", data)
+		if data['username'] == Global.username:
+			print("Received self broadcast")
+			return
+		#print("SPAWNING OTHER PLAYER ROOT", data)
 		get_node("/root/root/players/player1").spawn_other_player_root(
 			Vector2(data['position'][0], data['position'][1]),
 			Vector2(data['scale'][0], data['scale'][1]),
@@ -83,7 +86,7 @@ func _process(delta):
 	_client.poll()
 
 func send_message(data):
-	var user_dict = {"type" : "simple", "username" : get_node("/root/root").username, "recipients" : "all", "group" : self.my_group}
+	var user_dict = {"type" : "simple", "username" : Global.username, "recipients" : "all", "group" : self.my_group}
 	user_dict.merge(data)
 	var text_data = JSON.print(user_dict).to_utf8()
 	_client.get_peer(1).put_packet(text_data)

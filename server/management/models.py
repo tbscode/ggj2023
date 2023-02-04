@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from uuid import uuid4
 from secrets import token_hex
@@ -55,8 +56,17 @@ class User(AbstractUser):
         return State.objects.get(user=self)
 
     def join_room(self, room):
-        self.state.cur_room = room
-        self.state.save()
+        if not self.state.cur_room:
+            self.state.cur_room = room
+            self.state.save()
+            return True
+        else:
+            if self in room.active_players:
+                return False  # alreay joined
+            else:
+                self.state.cur_room = room
+                self.state.save()
+                return True
 
     def leave_room(self):
         self.state.cur_room.active_players.remove(self)
@@ -87,6 +97,46 @@ def random_spawn(team):
     return SPAWNS[team][0]
 
 
+MAXIMUM_TREE_XP = 100000.0
+
+MAX_X = -408
+MAP_Y = -588
+MAP_WIDTH = 728
+MAP_HEIGHT = 621
+
+
+def random_map_position():
+    return (random.randint(MAX_X, MAX_X + MAP_WIDTH), random.randint(MAP_Y, MAP_Y + MAP_HEIGHT))
+
+
+AMOUNT_OF_WATER_RESOVOIRS = 20
+AMOUNT_OF_GROWTH_RESOVOIRS = 20
+
+WATER_XP_RANGE = (1000.0, 10000.0)
+
+GROTH_FACTOR_RANGE = (1.02, 1.6)
+
+
+def generate_game_map():
+    map_objects = []
+    for i in range(AMOUNT_OF_WATER_RESOVOIRS):
+        x, y = random_map_position()
+        map_objects.append({
+            "type": "water",
+            "xp": random.uniform(*WATER_XP_RANGE),
+            "position": [x, y]
+        })
+
+    for i in range(AMOUNT_OF_GROWTH_RESOVOIRS):
+        x, y = random_map_position()
+        map_objects.append({
+            "type": "growth",
+            "grow": random.uniform(*GROTH_FACTOR_RANGE),
+            "position": [x, y]
+        })
+    return map_objects
+
+
 class GameRoom(models.Model):
 
     time = models.DateTimeField(auto_now_add=True)
@@ -103,7 +153,12 @@ class GameRoom(models.Model):
     red_team = models.ManyToManyField(
         User, related_name="red_team", blank=True, null=True)
 
+    map = models.JSONField(default=generate_game_map, blank=True, null=True)
+
     old = models.BooleanField(default=False)
+
+    blue_tree_xp = models.FloatField(default=0)
+    red_tree_xp = models.FloatField(default=0)
 
     def join_room(self, user):
         self.active_players.add(user)
@@ -128,7 +183,8 @@ def get_game_room():
     if all_rooms.count() == 0:
         room = GameRoom.objects.create()
     else:
-        room = GameRoom.objects.all().order_by("time").first()
+        room = GameRoom.objects.all().order_by("-time").first()
+        print("TBS foll or old", room.is_room_full(), room.old, room.hash)
         if room.is_room_full() or room.old:
             room = GameRoom.objects.create()
     return room

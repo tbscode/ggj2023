@@ -9,3 +9,5 @@ const WEBSOCKET_URL = WEBSOCKET_PROTOCOL + "t1m.me/ws/game/" if IS_PROD else WEB
 var key = ""
 var session_id = ""
 var username = ""
+
+var playing_online = true

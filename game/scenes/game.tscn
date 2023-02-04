@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/background.jpg" type="Texture" id=1]
 [ext_resource path="res://scripts/player.gd" type="Script" id=2]
@@ -8,18 +8,30 @@
 [ext_resource path="res://scripts/menu/menu.gd" type="Script" id=6]
 [ext_resource path="res://scripts/socket.gd" type="Script" id=7]
 [ext_resource path="res://assets/tree_start.png" type="Texture" id=8]
+[ext_resource path="res://scenes/camera.gd" type="Script" id=9]
 
 [sub_resource type="Theme" id=1]
+
+[sub_resource type="CircleShape2D" id=6]
+
+[sub_resource type="StreamTexture" id=4]
+load_path = "res://.import/root_branch2.png-3786f22edbf02d39f598d084e152d68c.stex"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 11, 24 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 232.5, 300.5 )
 
 [node name="root" type="Node2D"]
 position = Vector2( 418, 301 )
 script = ExtResource( 6 )
 
 [node name="background" type="TextureRect" parent="."]
-margin_left = -405.0
-margin_top = -594.0
-margin_right = 323.0
-margin_bottom = 27.0
+margin_left = -408.0
+margin_top = -588.0
+margin_right = 320.0
+margin_bottom = 33.0
 rect_scale = Vector2( 3.01224, 3.01224 )
 theme = SubResource( 1 )
 texture = ExtResource( 1 )
@@ -42,29 +54,47 @@ position = Vector2( 112, 145 )
 [node name="blue" type="Node2D" parent="spawns"]
 position = Vector2( 452, 146 )
 
-[node name="players" type="Node" parent="."]
+[node name="players" type="Node2D" parent="."]
+position = Vector2( 0, -1 )
 
-[node name="player1" type="Node" parent="players"]
+[node name="player1" type="Node2D" parent="players"]
 script = ExtResource( 2 )
 
-[node name="end_of_root" type="Sprite" parent="players/player1"]
-position = Vector2( 168, 132 )
-texture = ExtResource( 3 )
+[node name="end_of_root" type="KinematicBody2D" parent="players/player1"]
+position = Vector2( -271, -169 )
 
 [node name="camera" type="Camera2D" parent="players/player1/end_of_root"]
 position = Vector2( 250, 169 )
 current = true
-zoom = Vector2( 3, 3 )
+script = ExtResource( 9 )
+
+[node name="Tween" type="Tween" parent="players/player1/end_of_root/camera"]
+
+[node name="body" type="CollisionShape2D" parent="players/player1/end_of_root"]
+shape = SubResource( 6 )
 
 [node name="others" type="Node" parent="players"]
 
 [node name="resources" type="Node" parent="."]
 
 [node name="root_branch" type="Sprite" parent="resources"]
-position = Vector2( -166, 230 )
+position = Vector2( -105, 233 )
 texture = ExtResource( 5 )
 centered = false
 offset = Vector2( -10, -10 )
+
+[node name="root_branch_collide" type="Sprite" parent="resources"]
+modulate = Color( 0.839216, 0.352941, 0.352941, 1 )
+position = Vector2( -161, 231 )
+texture = SubResource( 4 )
+centered = false
+offset = Vector2( -15, -12 )
+
+[node name="body" type="StaticBody2D" parent="resources/root_branch_collide"]
+
+[node name="collider" type="CollisionShape2D" parent="resources/root_branch_collide/body"]
+position = Vector2( 0, 12 )
+shape = SubResource( 2 )
 
 [node name="root_element" type="Sprite" parent="resources"]
 position = Vector2( -142, 178 )
@@ -112,5 +142,13 @@ rect_scale = Vector2( 5.11669, 3.16508 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 text = "Pre game 
 screen"
+
+[node name="boarder" type="Node2D" parent="."]
+
+[node name="area_left" type="Area2D" parent="boarder"]
+
+[node name="collider" type="CollisionShape2D" parent="boarder/area_left"]
+position = Vector2( -639, -2 )
+shape = SubResource( 5 )
 
 [connection signal="pressed" from="pre_game_screen/join_lobby" to="." method="_on_join_lobby_pressed"]
