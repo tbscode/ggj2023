@@ -1,7 +1,8 @@
 extends Node
 
 #const BACKEND_URL = "http://localhost:8000"
-const BACKEND_URL = "http://localhost:8000"
+#const BACKEND_URL = "http://localhost:8000"
+const BACKEND_URL = "https://t1m.me"
 const GUEST_LOGIN_URL = BACKEND_URL + "/api/guest_login/"
 const USER_LOGIN_URL = BACKEND_URL + "/api/user_login/"
 
