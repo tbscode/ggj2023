@@ -55,6 +55,7 @@ position = Vector2( 768, 29 )
 texture = ExtResource( 4 )
 
 [node name="terminal" type="TextEdit" parent="game_ui"]
+visible = false
 margin_left = 511.0
 margin_top = 69.0
 margin_right = 818.0
@@ -65,6 +66,7 @@ wrap_enabled = true
 script = ExtResource( 7 )
 
 [node name="pre_game_screen" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="placeholder" type="RichTextLabel" parent="pre_game_screen"]
 anchor_right = 1.024

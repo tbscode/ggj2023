@@ -9,7 +9,7 @@ func _ready():
 func _on_join_game_button_pressed():
 	$user_auth.login_user()
 
-func login_completed(username, session_id):
+func login_completed(username, session_id, key):
 	print(username)
 	$name_label.text = username
 	Global.session_id = session_id
@@ -21,9 +21,9 @@ func login_completed(username, session_id):
 	var safe_user = File.new()
 	safe_user.open("user://user.save", File.WRITE)
 	safe_user.store_line(JSON.print({
-		"username": response['username'],
+		"username": username,
 		"session" : session_id,
-		"key" : response['key']
+		"key" : key
 	}))
 	safe_user.close()
 
