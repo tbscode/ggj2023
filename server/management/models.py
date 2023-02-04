@@ -99,6 +99,8 @@ class State(models.Model):
     hash = models.CharField(max_length=100, blank=True,
                             unique=True, default=uuid4)
 
+    key = models.CharField(max_length=100, blank=True, null=True)
+
 
 class RequestLog(models.Model):
     request_method = models.CharField(max_length=10)
