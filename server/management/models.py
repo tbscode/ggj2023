@@ -105,18 +105,21 @@ def random_spawn(team):
 
 MAXIMUM_TREE_XP = 100000.0
 
-MAX_X = -408
-MAP_Y = -588
-MAP_WIDTH = 728
-MAP_HEIGHT = 621
+MAX_X = -404.0
+MAP_Y = -181.0
+SCALE = 3.012
+MAP_WIDTH = 728.0 * SCALE
+MAP_HEIGHT = 421.0 * SCALE
 
 
 def random_map_position():
-    return (random.randint(MAX_X, MAX_X + MAP_WIDTH), random.randint(MAP_Y, MAP_Y + MAP_HEIGHT))
+    return (random.uniform(MAX_X, MAX_X + MAP_WIDTH), random.uniform(MAP_Y, MAP_Y + MAP_HEIGHT))
 
 
 AMOUNT_OF_WATER_RESOVOIRS = 20
 AMOUNT_OF_GROWTH_RESOVOIRS = 20
+AMOUNT_OF_BONES = 10
+AMOUNT_OF_STONES = 10
 
 WATER_XP_RANGE = (1000.0, 10000.0)
 
@@ -140,6 +143,21 @@ def generate_game_map():
             "grow": random.uniform(*GROTH_FACTOR_RANGE),
             "position": [x, y]
         })
+
+    for i in range(AMOUNT_OF_BONES):
+        x, y = random_map_position()
+        map_objects.append({
+            "type": "bone",
+            "position": [x, y]
+        })
+
+    for i in range(AMOUNT_OF_STONES):
+        x, y = random_map_position()
+        map_objects.append({
+            "type": "stone",
+            "position": [x, y]
+        })
+
     return map_objects
 
 
