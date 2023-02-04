@@ -1,5 +1,7 @@
 extends Node
 
+var IS_ONLINE = true
+
 const MIN_ANGLE_THRESHOLD = deg2rad(10.0)
 const ANGLE_CHANGE_VELOCITY = deg2rad(10.0) * 600.0
 const GROW_SPEED = 80.0
@@ -21,16 +23,19 @@ var root_path_element_positions = []
 var root_path_element_nodes = []
 
 func _ready():
-	init_player()
+	pass
+	#init_player()
 
-func init_player():
-	root_element_positions.append($end_of_root.position)
+func init_player(spawn):
+	$end_of_root.position = spawn
+	root_element_positions.append(spawn)
 	spawn_root_path_element()
 
 func _process(delta):
-	move_direction(delta)
-	process_direction_input(delta)
-	scale_root(delta)
+	if get_node("/root/root").game_started:
+		move_direction(delta)
+		process_direction_input(delta)
+		scale_root(delta)
 
 func process_direction_input(delta):
 	if Input.is_action_pressed("ui_left"):
@@ -110,7 +115,29 @@ func append_root():
 	own(node, self)
 	root_parts.append(node)
 
+	if IS_ONLINE:
+		get_node("/root/root/session_controller").send_message({
+			"event" : "other_player_spawn_root",
+			"position": [$end_of_root.position.x, $end_of_root.position.y],
+			"scale": [$end_of_root.scale.x, $end_of_root.scale.y],
+			"rotation": rot_dir
+		})
+
 	print("INSTANCE", node);
+
+func spawn_other_player_root(position, scale, rotation):
+	var node = get_node("/root/root/resources/root_branch").duplicate()
+
+	var container = get_node("/root/root/players/others")
+
+	container.add_child(node)
+	node.position.x = position[0]
+	node.position.y = position[1]
+	node.scale.x = scale[0]
+	node.scale.y = scale[1]
+	node.rotation = rotation
+
+	own(node, container)
 
 static func own(node, new_owner):
 	if not node == new_owner and (not node.owner or node.filename):

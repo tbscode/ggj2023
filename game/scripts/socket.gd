@@ -1,12 +1,19 @@
 extends Node
 
+const BACKEND_URL = Global.BACKEND_URL
+const SOCKET_URL = Global.WEBSOCKET_URL
 #const BACKEND_URL = "http://localhost:8000"
-const BACKEND_URL = "https://t1m.me"
-const SOCKET_URL = "wss://t1m.me/ws/game/"
 #const SOCKET_URL = "ws://localhost:8000/ws/game/"
 
+var console_path = "/root/root/console"
 var _client = WebSocketClient.new()
 var my_group = ""
+var my_team = ""
+var my_spawn = ""
+
+func init(console_path):
+	self.console_path = console_path
+	self._client = WebSocketClient.new()
 
 func _ready():
 	_client.connect("connection_closed", self, "_closed")
@@ -19,6 +26,7 @@ func connect_to_socket(session_id):
 	# TODO use secure websocket in production
 	var headers = PoolStringArray() # Need this for user authentication
 	headers.append("Cookie: sessionid=" + session_id + ";")
+	print("DOCK", SOCKET_URL)
 	var err = _client.connect_to_url(SOCKET_URL, [], false, headers)
 	if err != OK:
 		print("Unable to connect")
@@ -44,12 +52,32 @@ func _on_data():
 	# using the MultiplayerAPI.
 	var data = _client.get_peer(1).get_packet().get_string_from_utf8()
 	print("Got data from server: ", data)
-	get_node("/root/root/console").text += data
+	get_node(console_path).text += data
 	data = JSON.parse(data).result
 	if data['event'] == 'connected':
 		# Now we can start playing
 		self.my_group = data['group']
+		self.my_team = data['team']
+		self.my_spawn = data['spawn']
+		print("SPAWN", self.my_spawn)
+
+		get_node("/root/root/players/player1").init_player(Vector2(self.my_spawn[0], self.my_spawn[1]))
+		get_node("/root/root/game_ui/team_label").text = "Team: " + self.my_team
 		print("CONNECTED TO SERVER", "Got group", self.my_group)
+	elif data['event'] == 'game_start':
+		get_node(console_path).text += "\nGOT GAME START!\n"
+		get_node("/root/root").game_started = true
+		get_node("/root/root/pre_game_screen").hide()
+	elif data['event'] == 'other_player_spawn_root':
+		print("SPAWNING OTHER PLAYER ROOT", data)
+		get_node("/root/root/players/player1").spawn_other_player_root(
+			Vector2(data['position'][0], data['position'][1]),
+			Vector2(data['scale'][0], data['scale'][1]),
+			data['rotation']
+		)
+
+	elif data['event'] == 'broadcast_message':
+		pass # Load user positions a co...
 
 func _process(delta):
 	_client.poll()

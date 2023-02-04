@@ -3,8 +3,15 @@ extends Node2D
 var session_id = ""
 var username = ""
 
+var game_started = false
+
 func _ready():
 	pass
+
+func _on_join_lobby_pressed():
+	print("User trying to join lobby")
+	get_node("/root/root/session_controller").console_path = "/root/root/pre_game_screen/terminal"
+	get_node("/root/root/session_controller").connect_to_socket(Global.session_id)
 
 func _on_join_game_button_pressed():
 	$user_auth.login_user()

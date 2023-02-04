@@ -10,7 +10,8 @@ func _on_join_game_button_pressed():
 	var save_file = File.new()
 	var file_exists = save_file.file_exists("user://user.save")
 
-	if file_exists:
+	if false:
+		# We always make a new account for now
 		save_file.open("user://user.save", File.READ)
 		var file_text = ""
 		while not save_file.eof_reached():
@@ -39,6 +40,11 @@ func login_completed(username, session_id, key):
 	Global.key = key
 	self.session_id = session_id
 	self.username = username
+
+func _on_play_online_button_pressed():
+	print("PLAY online button")
+	get_tree().change_scene("res://scenes/game.tscn")
+
 
 
 func _on_connect_websocket_pressed():
