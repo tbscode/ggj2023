@@ -154,3 +154,5 @@ cython_debug/
 
 # Ignore extracted statics
 server/static
+
+server_setup/
