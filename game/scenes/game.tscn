@@ -144,6 +144,7 @@ shape = SubResource( 6 )
 [node name="others" type="Node" parent="players"]
 
 [node name="resources" type="Node2D" parent="."]
+visible = false
 position = Vector2( -1000, 0 )
 
 [node name="root_branch" type="Sprite" parent="resources"]
@@ -286,7 +287,6 @@ region_rect = Rect2( 0, 0, 1450, 400 )
 script = ExtResource( 7 )
 
 [node name="pre_game_screen" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="terminal" type="TextEdit" parent="pre_game_screen"]
 margin_left = 866.0
