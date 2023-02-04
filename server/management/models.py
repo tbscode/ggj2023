@@ -61,7 +61,7 @@ class User(AbstractUser):
             self.state.save()
             return True
         else:
-            if self in room.active_players:
+            if self in room.active_players.all():
                 return False  # alreay joined
             else:
                 self.state.cur_room = room
