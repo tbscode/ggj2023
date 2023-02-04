@@ -60,8 +60,6 @@ margin_right = -109.0
 margin_bottom = -216.0
 text = "send test message"
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-
 [connection signal="pressed" from="join_game_button" to="." method="_on_join_game_button_pressed"]
 [connection signal="pressed" from="connect_websocket" to="." method="_on_connect_websocket_pressed"]
 [connection signal="pressed" from="test_message_button" to="." method="_on_test_message_button_pressed"]

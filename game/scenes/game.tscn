@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/background.png" type="Texture" id=1]
 [ext_resource path="res://scripts/player.gd" type="Script" id=2]
 [ext_resource path="res://assets/root_end.png" type="Texture" id=3]
 [ext_resource path="res://assets/direction_display.png" type="Texture" id=4]
+[ext_resource path="res://assets/root_branch.png" type="Texture" id=5]
 
 [sub_resource type="Theme" id=1]
 
@@ -33,6 +34,12 @@ position = Vector2( 250, 169 )
 current = true
 
 [node name="resources" type="Node" parent="."]
+
+[node name="root_branch" type="Sprite" parent="resources"]
+position = Vector2( -166, 230 )
+texture = ExtResource( 5 )
+centered = false
+offset = Vector2( -10, -10 )
 
 [node name="root_element" type="Sprite" parent="resources"]
 position = Vector2( -142, 178 )
