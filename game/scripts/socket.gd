@@ -50,14 +50,10 @@ func _on_data():
 		print("CONNECTED TO SERVER", "Got group", self.my_group)
 
 func _process(delta):
-	# Call this in _process or _physics_process. Data transfer, and signals
-	# emission will only happen when calling this function.
 	_client.poll()
 
 func send_message(data):
 	var user_dict = {"type" : "simple", "username" : get_node("/root/root").username, "recipients" : "all", "group" : self.my_group}
 	user_dict.merge(data)
-	print("SENDING MESSAGE", user_dict)
 	var text_data = JSON.print(user_dict).to_utf8()
-	print("SENDING MESSAGE 2", text_data)
 	_client.get_peer(1).put_packet(text_data)
