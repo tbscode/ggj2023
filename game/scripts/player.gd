@@ -80,6 +80,9 @@ func _send_xp_water_collect_update(delta, xp):
 			"xp" : xp
 		})
 
+	get_node("/root/root").maybe_update_tree_level(Global.player_team)
+	
+
 func move_direction(delta):
 	# Check the current angle, calculate the position to move to
 	var heading = Vector2(cos(angle), sin(angle)) * GROW_SPEED * delta

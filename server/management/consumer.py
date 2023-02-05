@@ -74,11 +74,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         await sync_to_async(user.leave_room)()
 
     async def broadcast_message(self, event):
-        # if self.scope['user'].username != event['data']['username']:
-        await self.send(text_data=json.dumps({
-            'event': 'broadcast_message',
-            **event['data'],
-        }))
+        if self.scope['user'].username != event['data']['username']:
+            await self.send(text_data=json.dumps({
+                'event': 'broadcast_message',
+                **event['data'],
+            }))
 
     async def receive(self, bytes_data):
         print("RECEIVED message", bytes_data.decode())
@@ -99,7 +99,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'data': {
                         "xp": data['xp'],
                         "event": "xp_collected",
-                        "team": team
+                        "team": team,
+                        "username": "ignore"
                     }
                 })
                 if team_won:
@@ -107,7 +108,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'type': 'broadcast_message',
                         'data': {
                             "event": "team_won",
-                            "team": team
+                            "team": team,
+                            "username": "ignore"
                         }
                     })
             else:

@@ -42,13 +42,20 @@ func _on_join_lobby_pressed():
 
 func maybe_update_tree_level(team):
 	# There are levels from 0 to 5 so we have 0.2 increments
+	print("ATTEMPTING TREE UPDATE")
 	if team == "red":
 		var xp_ration = red_team_xp / MAXIMUM_XP
-		if (get_node("/root/root/trees").current_level_red + 1) * 0.2 > xp_ration:
+		print("XP RATION ", xp_ration, "CURRENT LEVEL", get_node("/root/root/trees").current_level_red)
+		var compare = (get_node("/root/root/trees").current_level_red + 1) * 0.1
+		print("COMP", compare)
+		if compare < xp_ration:
 			get_node("/root/root/trees").grow_level("red")
 	else:
 		var xp_ration = blue_team_xp / MAXIMUM_XP
-		if (get_node("/root/root/trees").current_level_blue + 1) * 0.2 > xp_ration:
+		print("XP RATION ", xp_ration, "CURRENT LEVEL", get_node("/root/root/trees").current_level_blue)
+		var compare = (get_node("/root/root/trees").current_level_blue + 1) * 0.1
+		print("COMP", compare)
+		if compare < xp_ration:
 			get_node("/root/root/trees").grow_level("blue")
 
 func _on_join_game_button_pressed():
