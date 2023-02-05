@@ -4,7 +4,7 @@ var session_id = ""
 var username = ""
 
 func _ready():
-	pass
+	get_node("/root/root/music").play()
 
 func _on_join_game_button_pressed():
 	var save_file = File.new()
@@ -35,8 +35,9 @@ func _on_join_game_button_pressed():
 func _on_play_online_pressed():
 	_on_join_game_button_pressed()
 
-func login_completed(username, session_id, key):
+func login_completed(username, session_id, key, map):
 	print(username)
+	Global.single_player_map = map
 	$name_label.text = username
 	Global.session_id = session_id
 	Global.username = username

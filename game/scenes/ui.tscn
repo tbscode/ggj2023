@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scripts/menu/game_selection_menu.gd" type="Script" id=1]
 [ext_resource path="res://scripts/auth.gd" type="Script" id=2]
@@ -13,8 +13,32 @@
 [ext_resource path="res://assets/play_offline_pressed.png" type="Texture" id=11]
 [ext_resource path="res://assets/play_button_pressed.png" type="Texture" id=12]
 [ext_resource path="res://assets/credits_button_pressed.png" type="Texture" id=13]
+[ext_resource path="res://assets/Caveat-VariableFont_wght.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://assets/audio/ambiente.ogg" type="AudioStream" id=15]
 
 [sub_resource type="StyleBoxTexture" id=1]
+
+[sub_resource type="DynamicFont" id=2]
+size = 42
+font_data = ExtResource( 14 )
+
+[sub_resource type="Theme" id=3]
+default_font = SubResource( 2 )
+
+[sub_resource type="Animation" id=4]
+resource_name = "online_effekt"
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:rect_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0 ]
+}
 
 [node name="root" type="Control"]
 script = ExtResource( 1 )
@@ -94,6 +118,28 @@ texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 12 )
 texture_hover = ExtResource( 8 )
 
+[node name="label_container" type="Control" parent="play_online"]
+margin_left = 199.096
+margin_top = 193.609
+margin_right = 199.096
+margin_bottom = 193.609
+rect_rotation = 11.8
+
+[node name="online_label" type="Label" parent="play_online/label_container"]
+margin_left = -60.6586
+margin_top = 15.1254
+margin_right = 123.341
+margin_bottom = 81.1254
+rect_rotation = -25.0554
+rect_scale = Vector2( 0.73607, 0.73607 )
+theme = SubResource( 3 )
+text = "online 1v1"
+align = 1
+
+[node name="animation" type="AnimationPlayer" parent="play_online"]
+root_node = NodePath("../label_container")
+anims/online_effekt = SubResource( 4 )
+
 [node name="credits_button" type="TextureButton" parent="."]
 margin_left = 852.0
 margin_top = 432.0
@@ -103,6 +149,11 @@ rect_scale = Vector2( 0.753453, 0.753453 )
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 13 )
 texture_hover = ExtResource( 9 )
+
+[node name="music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 15 )
+volume_db = -2.875
+pitch_scale = 1.01
 
 [connection signal="pressed" from="join_game_button" to="." method="_on_join_game_button_pressed"]
 [connection signal="pressed" from="connect_websocket" to="." method="_on_connect_websocket_pressed"]

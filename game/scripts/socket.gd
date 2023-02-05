@@ -51,13 +51,14 @@ func _on_data():
 	# to receive data from server, and not get_packet directly when not
 	# using the MultiplayerAPI.
 	var data = _client.get_peer(1).get_packet().get_string_from_utf8()
-	#print("Got data from server: ", data)
+	print("Got data from server: ", data)
 	get_node(console_path).text += data
 	data = JSON.parse(data).result
 	if data['event'] == 'connected':
 		# Now we can start playing
 		self.my_group = data['group']
 		self.my_team = data['team']
+		Global.player_team = data['team']
 		self.my_spawn = data['spawn']
 
 		print("SPAWN", self.my_spawn)
@@ -81,8 +82,26 @@ func _on_data():
 			data['rotation']
 		)
 
-	elif data['event'] == 'broadcast_message':
-		pass # Load user positions a co...
+	elif data['event'] == 'xp_collected':
+		var xp = data['xp']
+		var team = data['team']
+
+		if team == "red":
+			get_node("/root/root").red_team_xp += xp
+			get_node("/root/root").change_left_progress_relative()
+		elif team == "blue":
+			get_node("/root/root").blue_team_xp += xp
+			get_node("/root/root").change_right_progress_relative()
+	elif data['event'] == "team_won":
+		if data["team"] == Global.player_team:
+			# Then the player has WON
+			print("YOU WON")
+			pass
+		else:
+			# Then the player has LOST
+			print("YOU LOST")
+			pass
+			
 
 func _process(delta):
 	_client.poll()

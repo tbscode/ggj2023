@@ -40,7 +40,7 @@ func _on_guest_login_request_completed(request_id, result, headers, body):
 		header_str = header_str.substr(id_start + len("sessionid="))
 		var session_id = header_str.split(";")[0]
 
-		get_node("/root/root").login_completed(response['username'], session_id, response['key'])
+		get_node("/root/root").login_completed(response['username'], session_id, response['key'], response['map'])
 		get_tree().change_scene("res://scenes/game.tscn")
 	else:
 		# TODO: handle the error
@@ -57,7 +57,8 @@ func _on_login_request_completed(request_id, result, headers, body):
 		header_str = header_str.substr(id_start + len("sessionid="))
 		var session_id = header_str.split(";")[0]
 
-		get_node("/root/root").login_completed(response['username'], session_id, response['key'])
+		get_node("/root/root").login_completed(response['username'], session_id, response['key'], response['map'])
+
 		return response
 	else:
 		# TODO: handle the error

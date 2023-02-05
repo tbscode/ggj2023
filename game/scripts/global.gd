@@ -10,4 +10,8 @@ var key = ""
 var session_id = ""
 var username = ""
 
+var player_team = ""
+
 var playing_online = true
+
+var single_player_map = []

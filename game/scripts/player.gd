@@ -13,7 +13,7 @@ var cur_maximum_root_element_length = MAXIMUM_ROOT_ELEMENT_LENGTH
 const ROOT_SHRINK_SPEED = 0.04
 const MINIMUM_ROOT_SCALE = 0.4
 
-const XP_DRAIN_SPEED = 500.0
+const XP_DRAIN_SPEED = 700.0
 
 # A player is a 'root'
 # The root always grows downwards
@@ -73,6 +73,13 @@ func relocate_current_root():
 
 	angle = deg2rad(90.0)
 
+func _send_xp_water_collect_update(delta, xp):
+	if IS_ONLINE:
+		get_node("/root/root/session_controller").send_message({
+			"event" : "xp_collected",
+			"xp" : xp
+		})
+
 func move_direction(delta):
 	# Check the current angle, calculate the position to move to
 	var heading = Vector2(cos(angle), sin(angle)) * GROW_SPEED * delta
@@ -98,11 +105,12 @@ func move_direction(delta):
 				if owner.xp < 0.0:
 					owner.queue_free()
 
+					# now send server update!
+
 				if owner.xp / owner.INITAL_XP < 0.33333:
 					if not ("water_empty" in path):
 
 						print("33% percent !!!! ")
-
 						var pos_tmp = owner.position
 						var xp_tmp = owner.xp
 						var init_xp_tmp = owner.INITAL_XP
@@ -115,6 +123,8 @@ func move_direction(delta):
 						new_water.INITAL_XP = init_xp_tmp
 						father.add_child(new_water)
 						own(new_water, father)
+
+						_send_xp_water_collect_update(delta, init_xp_tmp - xp_tmp)
 
 				elif owner.xp / owner.INITAL_XP < 0.6666:
 
@@ -134,6 +144,9 @@ func move_direction(delta):
 						new_water.INITAL_XP = init_xp_tmp
 						father.add_child(new_water)
 						own(new_water, father)
+
+						_send_xp_water_collect_update(delta, init_xp_tmp - xp_tmp)
+
 				
 				# Now we might need to update the water texture ( make it smaller )
 

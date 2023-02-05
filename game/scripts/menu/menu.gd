@@ -7,8 +7,14 @@ var username = ""
 
 var game_started = false
 
+var MAXIMUM_XP = 50000.0
+
+var red_team_xp = 0.0
+var blue_team_xp = 0.0
+
 
 func _ready():
+	get_node("/root/root/audios/music").play()
 	if not Global.playing_online:
 		# generate a offline map
 		# TODO select a random spawn
@@ -25,6 +31,12 @@ func _on_join_lobby_pressed():
 
 func _on_join_game_button_pressed():
 	$user_auth.login_user()
+
+func change_left_progress_relative():
+	change_left_progress(red_team_xp / MAXIMUM_XP)
+
+func change_right_progress_relative():
+	change_right_progress(red_team_xp / MAXIMUM_XP)
 
 func change_left_progress(progress):
 	get_node("/root/root/game_ui/xp_bar_red_full").region_rect.size.x = FULL_XBAR_WIDTH * progress
