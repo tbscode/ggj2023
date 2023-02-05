@@ -7,7 +7,7 @@ var username = ""
 
 var game_started = false
 
-var MAXIMUM_XP = 50000.0
+var MAXIMUM_XP = 30000.0
 
 var red_team_xp = 0.0
 var blue_team_xp = 0.0
@@ -22,7 +22,7 @@ func _ready():
 		get_node("/root/root/players/player1").init_player(Vector2(0.0, 0.0))
 		game_started = true
 	change_left_progress(0.0)
-	change_right_progress(0.0)
+	change_right_progress(0.5)
 
 func _on_join_lobby_pressed():
 	print("User trying to join lobby")
@@ -33,10 +33,15 @@ func _on_join_game_button_pressed():
 	$user_auth.login_user()
 
 func change_left_progress_relative():
-	change_left_progress(red_team_xp / MAXIMUM_XP)
+	var ratio = red_team_xp / MAXIMUM_XP
+	print("RATIONS", ratio)
+	change_left_progress(ratio)
 
 func change_right_progress_relative():
-	change_right_progress(red_team_xp / MAXIMUM_XP)
+	var ratio = blue_team_xp / MAXIMUM_XP
+	print("RATIONS", ratio)
+	change_right_progress(1.0)
+	#change_right_progress(ratio)
 
 func change_left_progress(progress):
 	get_node("/root/root/game_ui/xp_bar_red_full").region_rect.size.x = FULL_XBAR_WIDTH * progress

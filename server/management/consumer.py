@@ -74,11 +74,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         await sync_to_async(user.leave_room)()
 
     async def broadcast_message(self, event):
-        if self.scope['user'].username != event['data']['username']:
-            await self.send(text_data=json.dumps({
-                'event': 'broadcast_message',
-                **event['data'],
-            }))
+        # if self.scope['user'].username != event['data']['username']:
+        await self.send(text_data=json.dumps({
+            'event': 'broadcast_message',
+            **event['data'],
+        }))
 
     async def receive(self, bytes_data):
         print("RECEIVED message", bytes_data.decode())
@@ -93,7 +93,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             if data['event'] == "xp_collected":
                 user = self.scope["user"]
                 # Now update the game room
-                team_won, team = await sync_to_async(user.cur_room.xp_collected)(user, data['xp'])
+                team_won, team = await sync_to_async(user.state.cur_room.xp_collected)(user, data['xp'])
                 await self.channel_layer.group_send(data['group'], {
                     'type': 'broadcast_message',
                     'data': {

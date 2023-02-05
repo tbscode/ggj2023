@@ -159,3 +159,4 @@ pitch_scale = 1.01
 [connection signal="pressed" from="connect_websocket" to="." method="_on_connect_websocket_pressed"]
 [connection signal="pressed" from="test_message_button" to="." method="_on_test_message_button_pressed"]
 [connection signal="pressed" from="play_online" to="." method="_on_play_online_pressed"]
+[connection signal="pressed" from="credits_button" to="." method="_on_credits_button_pressed"]

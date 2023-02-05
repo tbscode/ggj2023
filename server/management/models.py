@@ -103,7 +103,7 @@ def random_spawn(team):
     return SPAWNS[team][0]
 
 
-MAXIMUM_TREE_XP = 50000.0
+MAXIMUM_TREE_XP = 30000.0
 
 MAX_X = -404.0
 MAP_Y = -181.0
@@ -116,12 +116,12 @@ def random_map_position():
     return (random.uniform(MAX_X, MAX_X + MAP_WIDTH), random.uniform(MAP_Y, MAP_Y + MAP_HEIGHT))
 
 
-AMOUNT_OF_WATER_RESOVOIRS = 15
+AMOUNT_OF_WATER_RESOVOIRS = 30
 AMOUNT_OF_GROWTH_RESOVOIRS = 30
 AMOUNT_OF_BONES = 10
 AMOUNT_OF_STONES = 10
 
-WATER_XP_RANGE = (1000.0, 10000.0)
+WATER_XP_RANGE = (4000.0, 14000.0)
 GROTH_FACTOR_RANGE = (1.0, 1.4)
 
 

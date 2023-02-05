@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=70 format=2]
 
 [ext_resource path="res://assets/background.jpg" type="Texture" id=1]
 [ext_resource path="res://scripts/player.gd" type="Script" id=2]
@@ -47,6 +47,9 @@
 [ext_resource path="res://assets/tree_level5.png" type="Texture" id=45]
 [ext_resource path="res://scripts/trees.gd" type="Script" id=46]
 [ext_resource path="res://assets/audio/ambiente.ogg" type="AudioStream" id=47]
+[ext_resource path="res://assets/back_button_hover.png" type="Texture" id=48]
+[ext_resource path="res://assets/back_button.png" type="Texture" id=49]
+[ext_resource path="res://assets/back_button_pressed.png" type="Texture" id=50]
 
 [sub_resource type="Theme" id=1]
 
@@ -300,7 +303,7 @@ shape = SubResource( 7 )
 position = Vector2( -149, -108 )
 scale = Vector2( 0.18254, 0.18254 )
 frames = SubResource( 8 )
-frame = 3
+frame = 1
 playing = true
 script = ExtResource( 18 )
 
@@ -314,7 +317,6 @@ shape = SubResource( 9 )
 position = Vector2( -174, 42 )
 scale = Vector2( 0.183, 0.183 )
 frames = SubResource( 10 )
-frame = 2
 playing = true
 script = ExtResource( 18 )
 
@@ -354,6 +356,7 @@ texture = ExtResource( 35 )
 position = Vector2( -115, -29 )
 scale = Vector2( 0.184392, 0.184392 )
 frames = SubResource( 20 )
+frame = 2
 playing = true
 script = ExtResource( 18 )
 
@@ -466,7 +469,7 @@ Now it begins, your Battle of the Roots! "
 
 [node name="player_indicator" type="Sprite" parent="pre_game_screen"]
 visible = false
-position = Vector2( 1044, 456 )
+position = Vector2( 858, 524 )
 texture = ExtResource( 31 )
 
 [node name="label" type="Label" parent="pre_game_screen/player_indicator"]
@@ -490,6 +493,16 @@ margin_bottom = 807.0
 texture_normal = ExtResource( 32 )
 texture_pressed = ExtResource( 33 )
 texture_hover = ExtResource( 34 )
+
+[node name="back_button" type="TextureButton" parent="pre_game_screen"]
+margin_left = 953.0
+margin_top = 587.0
+margin_right = 1618.0
+margin_bottom = 1117.0
+rect_scale = Vector2( 0.448584, 0.448584 )
+texture_normal = ExtResource( 49 )
+texture_pressed = ExtResource( 50 )
+texture_hover = ExtResource( 48 )
 
 [node name="boarder" type="Node2D" parent="."]
 position = Vector2( -422, -168 )

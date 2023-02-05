@@ -13,7 +13,7 @@ var cur_maximum_root_element_length = MAXIMUM_ROOT_ELEMENT_LENGTH
 const ROOT_SHRINK_SPEED = 0.04
 const MINIMUM_ROOT_SCALE = 0.4
 
-const XP_DRAIN_SPEED = 700.0
+const XP_DRAIN_SPEED = 1000.0
 
 # A player is a 'root'
 # The root always grows downwards

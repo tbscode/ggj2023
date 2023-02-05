@@ -51,7 +51,7 @@ func _on_data():
 	# to receive data from server, and not get_packet directly when not
 	# using the MultiplayerAPI.
 	var data = _client.get_peer(1).get_packet().get_string_from_utf8()
-	print("Got data from server: ", data)
+	#print("Got data from server: ", data)
 	get_node(console_path).text += data
 	data = JSON.parse(data).result
 	if data['event'] == 'connected':
@@ -83,6 +83,7 @@ func _on_data():
 		)
 
 	elif data['event'] == 'xp_collected':
+		print("Got XP collected event ", data)
 		var xp = data['xp']
 		var team = data['team']
 

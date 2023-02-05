@@ -54,3 +54,8 @@ func _on_connect_websocket_pressed():
 func _on_test_message_button_pressed():
 	$socket_manager.send_message({"data" : "Hello World"})
 
+
+
+func _on_credits_button_pressed():
+	get_tree().change_scene("res://scenes/credits.tscn")
+	pass # Replace with function body.

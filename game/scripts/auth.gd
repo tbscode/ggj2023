@@ -58,7 +58,7 @@ func _on_login_request_completed(request_id, result, headers, body):
 		var session_id = header_str.split(";")[0]
 
 		get_node("/root/root").login_completed(response['username'], session_id, response['key'], response['map'])
-
+		get_tree().change_scene("res://scenes/game.tscn")
 		return response
 	else:
 		# TODO: handle the error
