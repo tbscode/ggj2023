@@ -17,16 +17,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+SECRET_KEY = os.environ["SECRET_KEY"]
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-osb4ll4%1--hnixv6+bl4025%jvj2rm96fk0!+4%n#=pbw+wu-'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 BASE_ADMIN_USERNAME = os.environ["BASE_ADMIN_USERNAME"]
 BASE_ADMIN_USER_PASSWORD = os.environ["BASE_ADMIN_USER_PASSWORD"]

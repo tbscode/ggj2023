@@ -92,7 +92,7 @@ func move_direction(delta):
 
 		var path = str(collide.collider.get_path())
 
-		if (not "water" in path) and (not "groth" in path):
+		if (not "water" in path) and (not "groth" in path) and (not "wall" in path):
 			var owner = collide.collider.get_parent()
 			owner.queue_free()
 			relocate_current_root()

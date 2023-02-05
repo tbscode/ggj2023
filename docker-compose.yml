@@ -14,7 +14,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DEBUG=1
+      - DEBUG=0
       - BASE_ADMIN_USERNAME=admin
       - BASE_ADMIN_USER_PASSWORD=password
       - CELERY_BROKER_URL=redis://host.docker.internal:6379
