@@ -15,8 +15,8 @@ func _ready():
 		get_node("/root/root/pre_game_screen").hide()
 		get_node("/root/root/players/player1").init_player(Vector2(0.0, 0.0))
 		game_started = true
-	change_left_progress(0.7)
-	change_right_progress(0.7)
+	change_left_progress(0.0)
+	change_right_progress(0.0)
 
 func _on_join_lobby_pressed():
 	print("User trying to join lobby")
@@ -61,3 +61,11 @@ func _on_connect_websocket_pressed():
 
 func _on_test_message_button_pressed():
 	$socket_manager.send_message({"data" : "Hello World"})
+
+
+func _on_join_lobby_button_pressed():
+	get_node("/root/root/pre_game_screen/player_indicator").show()
+	get_node("/root/root/pre_game_screen/animation").play("move_rootle")
+
+	get_node("/root/root/session_controller").console_path = "/root/root/pre_game_screen/terminal"
+	get_node("/root/root/session_controller").connect_to_socket(Global.session_id)

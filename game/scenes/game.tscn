@@ -1,8 +1,8 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://assets/background.jpg" type="Texture" id=1]
 [ext_resource path="res://scripts/player.gd" type="Script" id=2]
-[ext_resource path="res://assets/root_end.png" type="Texture" id=3]
+[ext_resource path="res://assets/empty_4.png" type="Texture" id=3]
 [ext_resource path="res://assets/direction_display.png" type="Texture" id=4]
 [ext_resource path="res://assets/root_branch2.png" type="Texture" id=5]
 [ext_resource path="res://scripts/menu/menu.gd" type="Script" id=6]
@@ -29,6 +29,15 @@
 [ext_resource path="res://assets/stone1.png" type="Texture" id=27]
 [ext_resource path="res://assets/text_area.png" type="Texture" id=28]
 [ext_resource path="res://assets/xp_bar_full.png" type="Texture" id=29]
+[ext_resource path="res://assets/Caveat-VariableFont_wght.ttf" type="DynamicFontData" id=30]
+[ext_resource path="res://assets/mini_plant.png" type="Texture" id=31]
+[ext_resource path="res://assets/play_button.png" type="Texture" id=32]
+[ext_resource path="res://assets/play_button_pressed.png" type="Texture" id=33]
+[ext_resource path="res://assets/play_button_hover.png" type="Texture" id=34]
+[ext_resource path="res://assets/root_branch_wulst.png" type="Texture" id=35]
+[ext_resource path="res://assets/empty_3.png" type="Texture" id=36]
+[ext_resource path="res://assets/empty_2.png" type="Texture" id=37]
+[ext_resource path="res://assets/empty_1.png" type="Texture" id=38]
 
 [sub_resource type="Theme" id=1]
 
@@ -68,6 +77,49 @@ animations = [ {
 extents = Vector2( 31, 10 )
 
 [sub_resource type="CircleShape2D" id=14]
+
+[sub_resource type="SpriteFrames" id=20]
+animations = [ {
+"frames": [ ExtResource( 38 ), ExtResource( 37 ), ExtResource( 36 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=21]
+
+[sub_resource type="DynamicFont" id=15]
+size = 40
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 30 )
+
+[sub_resource type="Theme" id=16]
+default_font = SubResource( 15 )
+
+[sub_resource type="DynamicFont" id=18]
+size = 43
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 30 )
+
+[sub_resource type="Theme" id=19]
+default_font = SubResource( 18 )
+
+[sub_resource type="Animation" id=17]
+resource_name = "move_rootle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1044, 456 ), Vector2( 1038, 344 ), Vector2( 1044, 456 ) ]
+}
 
 [sub_resource type="RectangleShape2D" id=12]
 extents = Vector2( 306.844, 5.43501 )
@@ -144,7 +196,6 @@ shape = SubResource( 6 )
 [node name="others" type="Node" parent="players"]
 
 [node name="resources" type="Node2D" parent="."]
-visible = false
 position = Vector2( -1000, 0 )
 
 [node name="root_branch" type="Sprite" parent="resources"]
@@ -166,10 +217,6 @@ texture = SubResource( 4 )
 position = Vector2( 0, 12 )
 shape = SubResource( 2 )
 
-[node name="root_element" type="Sprite" parent="resources"]
-position = Vector2( -142, 178 )
-texture = ExtResource( 3 )
-
 [node name="groth" type="Sprite" parent="resources"]
 texture = ExtResource( 12 )
 script = ExtResource( 13 )
@@ -181,23 +228,27 @@ physics_interpolation_mode = 1
 position = Vector2( -2.25, -10.25 )
 shape = SubResource( 7 )
 
-[node name="water" type="AnimatedSprite" parent="resources"]
-position = Vector2( -128.75, -131.202 )
+[node name="water_normal" type="AnimatedSprite" parent="resources"]
+position = Vector2( -149, -108 )
 scale = Vector2( 0.18254, 0.18254 )
 frames = SubResource( 8 )
-frame = 1
+frame = 2
 playing = true
 script = ExtResource( 18 )
 
-[node name="body" type="StaticBody2D" parent="resources/water"]
+[node name="body" type="StaticBody2D" parent="resources/water_normal"]
 
-[node name="collider" type="CollisionShape2D" parent="resources/water/body"]
+[node name="collider" type="CollisionShape2D" parent="resources/water_normal/body"]
 physics_interpolation_mode = 1
 shape = SubResource( 9 )
 
 [node name="water_full" type="AnimatedSprite" parent="resources"]
+position = Vector2( -174, 42 )
 scale = Vector2( 0.183, 0.183 )
 frames = SubResource( 10 )
+frame = 1
+playing = true
+script = ExtResource( 18 )
 
 [node name="body" type="StaticBody2D" parent="resources/water_full"]
 
@@ -226,11 +277,31 @@ texture = ExtResource( 27 )
 scale = Vector2( -3.54687, -3.7361 )
 shape = SubResource( 14 )
 
+[node name="root_element" type="Sprite" parent="resources"]
+position = Vector2( -145, 180 )
+scale = Vector2( 0.699687, 0.699687 )
+texture = ExtResource( 35 )
+
+[node name="water_empty" type="AnimatedSprite" parent="resources"]
+position = Vector2( -115, -29 )
+scale = Vector2( 0.184392, 0.184392 )
+frames = SubResource( 20 )
+frame = 3
+playing = true
+script = ExtResource( 18 )
+
+[node name="body" type="StaticBody2D" parent="resources/water_empty"]
+
+[node name="collider" type="CollisionShape2D" parent="resources/water_empty/body"]
+scale = Vector2( 15.0341, 15.0341 )
+shape = SubResource( 21 )
+
 [node name="items" type="Node2D" parent="."]
 
 [node name="game_ui" type="CanvasLayer" parent="."]
 
 [node name="root_direction_display" type="Sprite" parent="game_ui"]
+visible = false
 position = Vector2( 768, 29 )
 texture = ExtResource( 4 )
 
@@ -249,14 +320,6 @@ rect_scale = Vector2( 0.227285, 0.227285 )
 texture = ExtResource( 10 )
 flip_h = true
 flip_v = true
-
-[node name="season_display" type="TextureRect" parent="game_ui"]
-margin_left = 518.0
-margin_top = -2.0
-margin_right = 1096.0
-margin_bottom = 577.0
-rect_scale = Vector2( 0.261938, 0.261938 )
-texture = ExtResource( 11 )
 
 [node name="team_label" type="Label" parent="game_ui"]
 margin_right = 40.0
@@ -282,6 +345,12 @@ flip_h = true
 flip_v = true
 region_enabled = true
 region_rect = Rect2( 0, 0, 1450, 400 )
+
+[node name="season_display2" type="Sprite" parent="game_ui"]
+position = Vector2( 610, 67 )
+rotation = 0.796816
+scale = Vector2( 0.258565, 0.258565 )
+texture = ExtResource( 11 )
 
 [node name="session_controller" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -309,19 +378,52 @@ text = "Pre game
 screen"
 
 [node name="TextureRect" type="TextureRect" parent="pre_game_screen"]
-margin_left = 41.0
-margin_top = 33.0
-margin_right = 744.0
-margin_bottom = 612.0
-rect_scale = Vector2( 1.53331, 1.34641 )
+margin_left = -51.0
+margin_top = -37.0
+margin_right = 652.0
+margin_bottom = 542.0
+rect_scale = Vector2( 1.76547, 1.55027 )
 texture = ExtResource( 28 )
 
-[node name="join_lobby" type="Button" parent="pre_game_screen"]
-margin_left = 501.0
-margin_top = 589.0
-margin_right = 717.0
-margin_bottom = 625.0
-text = "join_lobby"
+[node name="RichTextLabel" type="RichTextLabel" parent="pre_game_screen"]
+margin_left = 234.0
+margin_top = 244.0
+margin_right = 1153.0
+margin_bottom = 515.0
+theme = SubResource( 16 )
+text = "Rude Roots Online 1v1!!
+Lenke mit A/D oder linke/rechte pfeiltste
+Vermeide steine knochen und wurzeln,
+zumindest wenn sie nicht zu deinem Baum gehoeren ;)
+Sammle wasser und pass auf das du nicht zu klein wirst,
+sonst musst du wo anders weiter wachsen!"
+
+[node name="player_indicator" type="Sprite" parent="pre_game_screen"]
+visible = false
+position = Vector2( 1044, 456 )
+texture = ExtResource( 31 )
+
+[node name="label" type="Label" parent="pre_game_screen/player_indicator"]
+margin_left = -88.0
+margin_top = 152.0
+margin_right = 124.0
+margin_bottom = 265.0
+theme = SubResource( 19 )
+text = "Waiting for 
+another player"
+
+[node name="animation" type="AnimationPlayer" parent="pre_game_screen"]
+root_node = NodePath("../player_indicator")
+anims/move_rootle = SubResource( 17 )
+
+[node name="join_lobby_button" type="TextureButton" parent="pre_game_screen"]
+margin_left = 174.0
+margin_top = 580.0
+margin_right = 446.0
+margin_bottom = 807.0
+texture_normal = ExtResource( 32 )
+texture_pressed = ExtResource( 33 )
+texture_hover = ExtResource( 34 )
 
 [node name="boarder" type="Node2D" parent="."]
 position = Vector2( -422, -168 )
@@ -370,4 +472,4 @@ stream = ExtResource( 20 )
 [node name="grow_sound" type="AudioStreamPlayer" parent="audios"]
 stream = ExtResource( 21 )
 
-[connection signal="pressed" from="pre_game_screen/join_lobby" to="." method="_on_join_lobby_pressed"]
+[connection signal="pressed" from="pre_game_screen/join_lobby_button" to="." method="_on_join_lobby_button_pressed"]

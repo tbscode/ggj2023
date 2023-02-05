@@ -6,14 +6,14 @@ const FULL_XBAR_WIDTH = 1450.0
 
 const MIN_ANGLE_THRESHOLD = deg2rad(10.0)
 const ANGLE_CHANGE_VELOCITY = deg2rad(10.0) * 600.0
-const GROW_SPEED = 80.0
-const MAXIMUM_ROOT_ELEMENT_LENGTH = 24.0
+const GROW_SPEED = 100.0
+const MAXIMUM_ROOT_ELEMENT_LENGTH = 36.0
 const MIN_ROOT_ELEMENT_SPAWN_DIST = 100.0
 var cur_maximum_root_element_length = MAXIMUM_ROOT_ELEMENT_LENGTH
 const ROOT_SHRINK_SPEED = 0.04
 const MINIMUM_ROOT_SCALE = 0.4
 
-const XP_DRAIN_SPEED = 2.0
+const XP_DRAIN_SPEED = 500.0
 
 # A player is a 'root'
 # The root always grows downwards
@@ -93,12 +93,56 @@ func move_direction(delta):
 			if "water" in path:
 				if not get_node("/root/root/audios/collect_water").playing:
 					get_node("/root/root/audios/collect_water").play()
+				var owner = collide.collider.get_parent()
+				owner.xp -= XP_DRAIN_SPEED * delta
+				if owner.xp < 0.0:
+					owner.queue_free()
+
+				if owner.xp / owner.INITAL_XP < 0.33333:
+					if not ("water_empty" in path):
+
+						print("33% percent !!!! ")
+
+						var pos_tmp = owner.position
+						var xp_tmp = owner.xp
+						var init_xp_tmp = owner.INITAL_XP
+						var father = owner.get_parent()
+						owner.queue_free()
+
+						var new_water = get_node("/root/root/resources/water_empty").duplicate()
+						new_water.position = pos_tmp
+						new_water.xp = xp_tmp
+						new_water.INITAL_XP = init_xp_tmp
+						father.add_child(new_water)
+						own(new_water, father)
+
+				elif owner.xp / owner.INITAL_XP < 0.6666:
+
+					if not ("water_normal" in path):
+
+						print("66% percent !!!! ")
+
+						var pos_tmp = owner.position
+						var xp_tmp = owner.xp
+						var init_xp_tmp = owner.INITAL_XP
+						var father = owner.get_parent()
+						owner.queue_free()
+
+						var new_water = get_node("/root/root/resources/water_normal").duplicate()
+						new_water.position = pos_tmp
+						new_water.xp = xp_tmp
+						new_water.INITAL_XP = init_xp_tmp
+						father.add_child(new_water)
+						own(new_water, father)
+				
+				# Now we might need to update the water texture ( make it smaller )
+
 			elif "groth" in path:
 				if not get_node("/root/root/audios/grow_sound").playing:
 					get_node("/root/root/audios/grow_sound").play()
 				var owner = collide.collider.get_parent()
-				self.scale.x *= owner.groth_multiplier
-				self.scale.y *= owner.groth_multiplier
+				$end_of_root.scale.x *= owner.groth_multiplier
+				$end_of_root.scale.y *= owner.groth_multiplier
 				owner.queue_free()
 
 	path_lengh_since_root_element += heading.length()
@@ -115,11 +159,16 @@ func move_direction(delta):
 
 func spawn_root_path_element():
 	var node = get_node("/root/root/resources/root_element").duplicate()
+	var vec_dir = -root_element_positions[-1] + $end_of_root.position
+	var rot_dir = atan2(vec_dir.y, vec_dir.x) - deg2rad(90.0)
 	add_child(node)
 	node.position.x = $end_of_root.position.x
 	node.position.y = $end_of_root.position.y
 	node.scale.x = $end_of_root.scale.x
 	node.scale.y = $end_of_root.scale.y
+
+	node.rotation = rot_dir
+
 	own(node, self)
 
 	root_path_element_positions.append($end_of_root.position)
@@ -176,7 +225,7 @@ func populate_map(map):
 		# print("TIEM", item)
 		# print("ADDMING", item)
 		if item['type'] == "water":
-			var node = get_node("/root/root/resources/water").duplicate()
+			var node = get_node("/root/root/resources/water_full").duplicate()
 			var container = get_node("/root/root/items")
 
 			container.add_child(node)
