@@ -15,6 +15,11 @@ This game features
 
 ### Full credits
 
+- 2D Art & UI: Inés Hackel (Sienna) & Nicole Petrasova (Nichelbichel)
+- Game Design: Inés Hackel (Sienna), Nicole Petrasova (Nichelbichel) & Elias Menzel (Dunediver)
+- Sound & Envirnmental Design: Martin Plückthun (TermiTV)
+- Godot Game & Server Backend Programming: Tim Schupp (jimtupp)
+
 ##### Notes
 
 credentials are not prod,
