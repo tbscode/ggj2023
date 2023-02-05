@@ -90,9 +90,11 @@ func _on_data():
 		if team == "red":
 			get_node("/root/root").red_team_xp += xp
 			get_node("/root/root").change_left_progress_relative()
+			print("updated RED team progress")
 		elif team == "blue":
 			get_node("/root/root").blue_team_xp += xp
 			get_node("/root/root").change_right_progress_relative()
+			print("updated BLUE team progress")
 	elif data['event'] == "team_won":
 		if data["team"] == Global.player_team:
 			# Then the player has WON

@@ -22,12 +22,24 @@ func _ready():
 		get_node("/root/root/players/player1").init_player(Vector2(0.0, 0.0))
 		game_started = true
 	change_left_progress(0.0)
-	change_right_progress(0.5)
+	change_right_progress(0.0)
 
 func _on_join_lobby_pressed():
 	print("User trying to join lobby")
 	get_node("/root/root/session_controller").console_path = "/root/root/pre_game_screen/terminal"
 	get_node("/root/root/session_controller").connect_to_socket(Global.session_id)
+
+
+func maybe_update_tree_level(team):
+	# There are levels from 0 to 5 so we have 0.2 increments
+	if team == "red":
+		var xp_ration = red_team_xp / MAXIMUM_XP
+		if (get_node("/root/root/trees").current_level_red + 1) * 0.2 > xp_ration:
+			get_node("/root/root/trees").grow_level("red")
+	else:
+		var xp_ration = blue_team_xp / MAXIMUM_XP
+		if (get_node("/root/root/trees").current_level_blue + 1) * 0.2 > xp_ration:
+			get_node("/root/root/trees").grow_level("blue")
 
 func _on_join_game_button_pressed():
 	$user_auth.login_user()
@@ -40,16 +52,20 @@ func change_left_progress_relative():
 func change_right_progress_relative():
 	var ratio = blue_team_xp / MAXIMUM_XP
 	print("RATIONS", ratio)
-	change_right_progress(1.0)
-	#change_right_progress(ratio)
+	change_right_progress(ratio)
 
 func change_left_progress(progress):
 	get_node("/root/root/game_ui/xp_bar_red_full").region_rect.size.x = FULL_XBAR_WIDTH * progress
 
 func change_right_progress(progress):
+	print("In progress", progress)
 	progress = 1.0 - progress
+	print("INITAL VALS", get_node("/root/root/game_ui/xp_bar_blue_full").region_rect.size.x, get_node("/root/root/game_ui/xp_bar_blue_full").offset.x)
+	get_node("/root/root/game_ui/xp_bar_blue_full").region_rect.size.x = 1450.0
+	get_node("/root/root/game_ui/xp_bar_blue_full").offset.x = -1450.0
 	get_node("/root/root/game_ui/xp_bar_blue_full").region_rect.size.x -= FULL_XBAR_WIDTH * progress
 	get_node("/root/root/game_ui/xp_bar_blue_full").offset.x += FULL_XBAR_WIDTH * progress
+	print("Cahnged bar progress", progress)
 
 func login_completed(username, session_id, key):
 	print(username)

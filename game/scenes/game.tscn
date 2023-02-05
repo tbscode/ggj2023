@@ -303,7 +303,7 @@ shape = SubResource( 7 )
 position = Vector2( -149, -108 )
 scale = Vector2( 0.18254, 0.18254 )
 frames = SubResource( 8 )
-frame = 1
+frame = 3
 playing = true
 script = ExtResource( 18 )
 
@@ -317,6 +317,7 @@ shape = SubResource( 9 )
 position = Vector2( -174, 42 )
 scale = Vector2( 0.183, 0.183 )
 frames = SubResource( 10 )
+frame = 2
 playing = true
 script = ExtResource( 18 )
 
@@ -356,7 +357,7 @@ texture = ExtResource( 35 )
 position = Vector2( -115, -29 )
 scale = Vector2( 0.184392, 0.184392 )
 frames = SubResource( 20 )
-frame = 2
+frame = 1
 playing = true
 script = ExtResource( 18 )
 
