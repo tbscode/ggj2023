@@ -18,6 +18,7 @@ services:
       - BASE_ADMIN_USERNAME=admin
       - BASE_ADMIN_USER_PASSWORD=password
       - CELERY_BROKER_URL=redis://host.docker.internal:6379
+      - SECRET_KEY=django-insecure-osb4ll4%1--hnixv6+bl4025%jvj2rm96fk0!+4%n#=pbw+wu-
       - BASE_URL=http://localhost:8000
     network_mode: bridge
     extra_hosts:
@@ -30,4 +31,28 @@ services:
     network_mode: bridge
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    profiles: ["default", "redis", "dev", "stage"]
+    profiles: ["default", "redis", "dev", "stage", "prod"]
+  server_prod:
+    build:
+      context: ./server
+      dockerfile: ../Dockerfile.server
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py shell --command 'from management.api import get_or_create_base_admin; get_or_create_base_admin()' &&
+      python manage.py collectstatic --noinput &&
+      sh ./entry.sh"
+    volumes:
+      - ./server:/server
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=0
+      - BASE_ADMIN_USERNAME=I wont tell you
+      - BASE_ADMIN_USER_PASSWORD=I wont tell you
+      - CELERY_BROKER_URL=I wont tell you
+      - SECRET_KEY=I wont tell you
+      - BASE_URL=I wont tell you
+    network_mode: bridge
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles: [ "default", "backend", "prod"]
