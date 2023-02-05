@@ -11,6 +11,8 @@ var my_group = ""
 var my_team = ""
 var my_spawn = ""
 
+var connected = false
+
 func init(console_path):
 	self.console_path = console_path
 	self._client = WebSocketClient.new()
@@ -67,6 +69,7 @@ func _on_data():
 		get_node("/root/root/game_ui/team_label").text = "Team: " + self.my_team
 		get_node("/root/root/players/player1").populate_map(data['map'])
 		print("CONNECTED TO SERVER", "Got group", self.my_group)
+		connected = true
 	elif data['event'] == 'game_start':
 		get_node(console_path).text += "\nGOT GAME START!\n"
 		get_node("/root/root").game_started = true
@@ -98,12 +101,15 @@ func _on_data():
 	elif data['event'] == "team_won":
 		if data["team"] == Global.player_team:
 			# Then the player has WON
-			print("YOU WON")
-			pass
+			get_node("/root/root").game_started = false
+			get_node("/root/root/victory_screen").show()
+			get_node("/root/root/after_game_nav").show()
 		else:
 			# Then the player has LOST
 			print("YOU LOST")
-			pass
+			get_node("/root/root").game_started = false
+			get_node("/root/root/loose_screen").show()
+			get_node("/root/root/after_game_nav").show()
 			
 
 func _process(delta):

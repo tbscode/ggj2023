@@ -24,6 +24,16 @@ func _ready():
 	change_left_progress(0.0)
 	change_right_progress(0.0)
 
+func _on_back_button_pressed():
+	if get_node("/root/root/session_controller").connected:
+		get_node("/root/root/session_controller")._client.disconnect_from_host()
+
+	print("SWITCHING DA SCENE")
+
+	get_tree().change_scene("res://scenes/ui.tscn")
+	
+
+
 func _on_join_lobby_pressed():
 	print("User trying to join lobby")
 	get_node("/root/root/session_controller").console_path = "/root/root/pre_game_screen/terminal"
@@ -102,3 +112,19 @@ func _on_join_lobby_button_pressed():
 
 	get_node("/root/root/session_controller").console_path = "/root/root/pre_game_screen/terminal"
 	get_node("/root/root/session_controller").connect_to_socket(Global.session_id)
+
+
+func _on_after_game_play_pressed():
+	print("PLAY AGAIN PRESSED")
+
+	if get_node("/root/root/session_controller").connected:
+		get_node("/root/root/session_controller")._client.disconnect_from_host()	
+
+	get_tree().change_scene("res://scenes/game.tscn")
+
+
+func _on_after_game_back_pressed():
+	if get_node("/root/root/session_controller").connected:
+		get_node("/root/root/session_controller")._client.disconnect_from_host()	
+
+	get_tree().change_scene("res://scenes/ui.tscn")

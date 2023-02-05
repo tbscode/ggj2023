@@ -303,7 +303,6 @@ shape = SubResource( 7 )
 position = Vector2( -149, -108 )
 scale = Vector2( 0.18254, 0.18254 )
 frames = SubResource( 8 )
-frame = 3
 playing = true
 script = ExtResource( 18 )
 
@@ -317,7 +316,7 @@ shape = SubResource( 9 )
 position = Vector2( -174, 42 )
 scale = Vector2( 0.183, 0.183 )
 frames = SubResource( 10 )
-frame = 2
+frame = 3
 playing = true
 script = ExtResource( 18 )
 
@@ -577,4 +576,29 @@ margin_bottom = 654.0
 rect_scale = Vector2( 1.1589, 1.1589 )
 texture = ExtResource( 40 )
 
+[node name="after_game_nav" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="after_game_play" type="TextureButton" parent="after_game_nav"]
+margin_left = 170.0
+margin_top = 574.0
+margin_right = 442.0
+margin_bottom = 801.0
+texture_normal = ExtResource( 32 )
+texture_pressed = ExtResource( 33 )
+texture_hover = ExtResource( 34 )
+
+[node name="after_game_back" type="TextureButton" parent="after_game_nav"]
+margin_left = 920.0
+margin_top = 557.0
+margin_right = 1585.0
+margin_bottom = 1087.0
+rect_scale = Vector2( 0.552204, 0.552204 )
+texture_normal = ExtResource( 49 )
+texture_pressed = ExtResource( 50 )
+texture_hover = ExtResource( 48 )
+
 [connection signal="pressed" from="pre_game_screen/join_lobby_button" to="." method="_on_join_lobby_button_pressed"]
+[connection signal="pressed" from="pre_game_screen/back_button" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="after_game_nav/after_game_play" to="." method="_on_after_game_play_pressed"]
+[connection signal="pressed" from="after_game_nav/after_game_back" to="." method="_on_after_game_back_pressed"]
