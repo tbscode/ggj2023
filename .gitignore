@@ -157,3 +157,4 @@ server/static
 server/staticfiles
 
 server_setup/
+docker-compose.yml
