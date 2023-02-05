@@ -103,7 +103,7 @@ def random_spawn(team):
     return SPAWNS[team][0]
 
 
-MAXIMUM_TREE_XP = 100000.0
+MAXIMUM_TREE_XP = 50000.0
 
 MAX_X = -404.0
 MAP_Y = -181.0
@@ -195,6 +195,25 @@ class GameRoom(models.Model):
         self.save()
         spawn = random_spawn(team)
         return team, spawn
+
+    def xp_collected(self, user, xp):
+        user_team = self.get_team(user)
+
+        team_finished = False
+        if user_team == "red":
+            self.red_tree_xp += xp
+            if self.red_tree_xp > MAXIMUM_TREE_XP:
+                team_finished = True
+        elif user_team == "blue":
+            self.blue_tree_xp += xp
+            if self.blue_tree_xp > MAXIMUM_TREE_XP:
+                team_finished = True
+        self.save()
+
+        return team_finished, user_team
+
+    def get_team(self, user):
+        return "red" if user in self.red_team.all() else "blue"
 
     def is_room_full(self):
         return self.active_players.count() >= PLAYERS_PER_ROOM

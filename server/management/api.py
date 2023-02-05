@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from uuid import uuid4
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
+from management.models import generate_game_map
 import json
 
 
@@ -17,7 +18,8 @@ def guest_login(request):
     login(request, user=user)
     return JsonResponse({
         "username": username,
-        "key": password
+        "key": password,
+        "map": generate_game_map()
     })
 
 
@@ -35,7 +37,8 @@ def user_login(request):
 
     return JsonResponse({
         "username": data['username'],
-        "key": data['password']
+        "key": data['password'],
+        "map": generate_game_map()
     })
 
 

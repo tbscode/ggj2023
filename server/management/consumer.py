@@ -90,7 +90,28 @@ class GameConsumer(AsyncWebsocketConsumer):
         except:
             return
         if data['type'] == "simple":
-            await self.channel_layer.group_send(data['group'], {
-                'type': 'broadcast_message',
-                'data': data
-            })
+            if data['event'] == "xp_collected":
+                user = self.scope["user"]
+                # Now update the game room
+                team_won, team = await sync_to_async(user.cur_room.xp_collected)(user, data['xp'])
+                await self.channel_layer.group_send(data['group'], {
+                    'type': 'broadcast_message',
+                    'data': {
+                        "xp": data['xp'],
+                        "event": "xp_collected",
+                        "team": team
+                    }
+                })
+                if team_won:
+                    await self.channel_layer.group_send(data['group'], {
+                        'type': 'broadcast_message',
+                        'data': {
+                            "event": "team_won",
+                            "team": team
+                        }
+                    })
+            else:
+                await self.channel_layer.group_send(data['group'], {
+                    'type': 'broadcast_message',
+                    'data': data
+                })
